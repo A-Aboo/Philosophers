@@ -41,6 +41,15 @@ int	init_data(t_data *data, int argc, char **argv);
 int	init_mutexes(t_data *data);
 void	init_philos(t_data *data);
 long	ft_atol(char *str);
+long	get_time_ms(void);
+int		create_threads(t_data *data);
+void	join_threads(t_data *data);
+void	*routine(void *arg);
+int		is_dead(t_data *data);
+void	print_m(t_philo *philo, char *msg);
+void	precise_sleep(long time_ms, t_data *data);
+void	take_forks(t_philo *philo);
+void	eat(t_philo *philo);
 
 
 #endif
