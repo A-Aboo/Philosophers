@@ -51,5 +51,8 @@ void	precise_sleep(long time_ms, t_data *data);
 void	take_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	*philosopher(void *arg);
+void	set_dead(t_data *data);
+int		check_philo_dead(t_philo *philo);
+void	monitor(t_data *data);
 
 #endif
