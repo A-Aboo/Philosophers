@@ -50,6 +50,6 @@ void	print_m(t_philo *philo, char *msg);
 void	precise_sleep(long time_ms, t_data *data);
 void	take_forks(t_philo *philo);
 void	eat(t_philo *philo);
-
+void	*philosopher(void *arg);
 
 #endif

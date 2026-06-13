@@ -44,7 +44,7 @@ int	create_threads(t_data *data)
 	{
 		data->philos[i].last_meal = data->start_time; // each philo is considered fed cause the last meal time is = creation time 
 		if (pthread_create(&data->philos[i].thread, NULL, // creates a thread for each philo 
-				routine, &data->philos[i]) != 0)
+				philosopher, &data->philos[i]) != 0)
 			return (1);
 		i++;
 	}
