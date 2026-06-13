@@ -54,5 +54,6 @@ void	*philosopher(void *arg);
 void	set_dead(t_data *data);
 int		check_philo_dead(t_philo *philo);
 void	monitor(t_data *data);
+void	clean(t_data *data);
 
 #endif
