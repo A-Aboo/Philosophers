@@ -5,15 +5,23 @@ void	*philosopher(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (philo->data->num_of_philos == 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		safe_print(philo, "has taken a fork");
+		precise_sleep(philo->data->time_to_die, philo->data);
+		pthread_mutex_unlock(philo->left_fork);
+		return (NULL);
+	}
 	if (philo->id % 2 == 0)
 		usleep(1000);
 	while (!is_dead(philo->data))
 	{
 		take_forks(philo);
 		eat(philo);
-		print_m(philo, "is sleeping");
+		safe_print(philo, "is sleeping");
 		precise_sleep(philo->data->time_to_sleep, philo->data);
-		print_m(philo, "is thinking");
+		safe_print(philo, "is thinking");
 	}
 	return (NULL);
 }
@@ -47,7 +55,7 @@ int	check_philo_dead(t_philo *philo)
 	return (0);
 }
 
-void	monitor(t_data *data) // checks that no one is dead 
+void	monitor(t_data *data)
 {
 	int	i;
 
@@ -60,6 +68,31 @@ void	monitor(t_data *data) // checks that no one is dead
 				return ;
 			i++;
 		}
+		if (all_ate_enough(data))
+		{
+			set_dead(data);
+			return ;
+		}
 		usleep(500);
 	}
+}
+
+int	all_ate_enough(t_data *data)
+{
+	int	i;
+	int	done;
+
+	if (data->num_times_to_eat == -1)
+		return (0);
+	i = 0;
+	done = 0;
+	pthread_mutex_lock(&data->meal_lock);
+	while (i < data->num_of_philos)
+	{
+		if (data->philos[i].meals_eaten >= data->num_times_to_eat)
+			done++;
+		i++;
+	}
+	pthread_mutex_unlock(&data->meal_lock);
+	return (done == data->num_of_philos);
 }

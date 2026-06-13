@@ -37,13 +37,23 @@ void	precise_sleep(long time_ms, t_data *data) // sleep of the philo
 	}
 }
 
-void	take_forks(t_philo *philo) // takes the two fork if another philo has it waits 
+ // takes the two fork if another philo has it waits 
+void	take_forks(t_philo *philo) // odd take left then right // even inverse 
 {
-	pthread_mutex_lock(philo->left_fork);
-	print_m(philo, "has taken a fork");
-
-	pthread_mutex_lock(philo->right_fork);
-	print_m(philo, "has taken a fork");
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->right_fork);
+		safe_print(philo, "has taken a fork");
+		pthread_mutex_lock(philo->left_fork);
+		safe_print(philo, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(philo->left_fork);
+		safe_print(philo, "has taken a fork");
+		pthread_mutex_lock(philo->right_fork);
+		safe_print(philo, "has taken a fork");
+	}
 }
 
 void	eat(t_philo *philo)// update meal info eat and release the forks for the other phios 
