@@ -36,7 +36,63 @@ The implementation focuses on:
 
 
 
+
+
 ## Algorithm
+
+The simulation is concurrent. Each philosopher is represented by one thread, and all philosopher threads run at the same time.
+
+Each philosopher repeatedly follows this cycle:
+
+```text
+take forks → eat → release forks → sleep → think
+```
+
+Forks are the main shared resources. There is one fork between each pair of philosophers, and each fork is protected by one mutex.
+
+```text
+1 fork = 1 mutex
+```
+
+A philosopher can eat only when they successfully lock both fork mutexes: the fork on their left and the fork on their right. While a philosopher holds a fork, no neighboring philosopher can take that same fork.
+
+This means neighboring philosophers cannot eat at the same time because they share one fork. However, non-neighboring philosophers can eat at the same time because they do not use the same forks.
+
+Example with 5 philosophers:
+
+```text
+P1 uses F1 + F5
+P2 uses F1 + F2
+P3 uses F2 + F3
+P4 uses F3 + F4
+P5 uses F4 + F5
+```
+
+So `P1` and `P2` cannot eat together because both need `F1`, but `P1` and `P3` can eat together because they do not share forks.
+
+To avoid deadlock, philosophers do not all take forks in the same order. Odd philosophers take the left fork first, then the right fork. Even philosophers take the right fork first, then the left fork.
+
+```text
+Odd philosophers  → left fork, then right fork
+Even philosophers → right fork, then left fork
+```
+
+This breaks the circular waiting situation where every philosopher takes one fork and waits forever for the second one.
+
+A monitor continuously checks the state of the simulation. For each philosopher, it compares the current time with the last time the philosopher started eating:
+
+```text
+current_time - last_meal > time_to_die
+```
+
+If this condition becomes true, the philosopher is considered dead. The monitor prints the death message, sets the shared death flag, and the simulation stops.
+
+If the optional argument `number_of_times_each_philosopher_must_eat` is provided, the monitor also checks whether all philosophers have eaten enough times. If all philosophers reach this number, the simulation stops without any death.
+
+Shared data such as printing, death status, last meal time, and meal counters are protected with mutexes to avoid data races.
+
+
+
 
 The simulation starts by parsing the program arguments and initializing the shared data: philosophers, forks, mutexes, timers, and the optional meal limit.
 

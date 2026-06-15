@@ -8,7 +8,7 @@ void	*philosopher(void *arg)
 	if (philo->data->num_of_philos == 1)
 	{
 		pthread_mutex_lock(philo->left_fork);
-		safe_print(philo, "has taken a fork");
+		print_m(philo, "has taken a fork");
 		precise_sleep(philo->data->time_to_die, philo->data);
 		pthread_mutex_unlock(philo->left_fork);
 		return (NULL);
@@ -19,9 +19,9 @@ void	*philosopher(void *arg)
 	{
 		take_forks(philo);
 		eat(philo);
-		safe_print(philo, "is sleeping");
+		print_m(philo, "is sleeping");
 		precise_sleep(philo->data->time_to_sleep, philo->data);
-		safe_print(philo, "is thinking");
+		print_m(philo, "is thinking");
 	}
 	return (NULL);
 }

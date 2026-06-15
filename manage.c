@@ -43,16 +43,16 @@ void	take_forks(t_philo *philo) // odd take left then right // even inverse
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		safe_print(philo, "has taken a fork");
+		print_m(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		safe_print(philo, "has taken a fork");
+		print_m(philo, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		safe_print(philo, "has taken a fork");
+		print_m(philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
-		safe_print(philo, "has taken a fork");
+		print_m(philo, "has taken a fork");
 	}
 }
 
